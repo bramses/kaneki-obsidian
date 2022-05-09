@@ -15,7 +15,7 @@ export default class MyPlugin extends Plugin {
 
 	getFrontmatter () {
 		const file = this.app.workspace.getActiveFile();
-		let fm = this.app.metadataCache.getFileCache(file)?.frontmatter;
+		const fm = this.app.metadataCache.getFileCache(file)?.frontmatter;
 		
 		if (fm === undefined) {
 			new Notice('No frontmatter found.');
@@ -41,6 +41,7 @@ export default class MyPlugin extends Plugin {
 			editorCallback: async (editor: Editor) => {
 				
 				try {
+					new Notice('Running Send to Kaneki...');
 					if (this.settings.rootPath === '') {
 						new Notice('Please set the root path in the settings.');
 						return;
@@ -61,8 +62,7 @@ export default class MyPlugin extends Plugin {
 						return;
 					}
 
-					const statusBarItemEl = this.addStatusBarItem();
-					statusBarItemEl.setText('Calling Kaneki...');
+					
 					await request({
 						url: 'http://localhost:3595/update',
 						method: 'POST',
@@ -71,7 +71,6 @@ export default class MyPlugin extends Plugin {
 							filePath: this.settings.rootPath + filePath,
 						})
 					})
-					statusBarItemEl.setText('');
 					new Notice(`${filePath} successfully sent to Kaneki.`);
 				} catch (err) {
 					new Notice(err);
@@ -86,6 +85,7 @@ export default class MyPlugin extends Plugin {
 			editorCallback: async (editor: Editor) => {
 				
 				try {
+					new Notice('Opening file in Chrome...');
 					if (this.settings.rootPath === '') {
 						new Notice('Please set the root path in the settings.');
 						return;
@@ -100,8 +100,6 @@ export default class MyPlugin extends Plugin {
 					
 					const filePath = this.app.workspace.getActiveFile().path;	
 	
-					const statusBarItemEl = this.addStatusBarItem();
-					statusBarItemEl.setText('Calling Kaneki...');
 					await request({
 						url: 'http://localhost:3595/open',
 						method: 'POST',
@@ -110,7 +108,6 @@ export default class MyPlugin extends Plugin {
 							slug: fm.slug,
 						})
 					})
-					statusBarItemEl.setText('');
 					new Notice(`${filePath} successfully opened with Kaneki.`);
 				} catch (err) {
 					new Notice(err);
