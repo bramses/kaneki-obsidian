@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, request } from 'obsidian';
+import { App, Editor, Notice, Plugin, PluginSettingTab, Setting, request } from 'obsidian';
 
 interface MyPluginSettings {
 	mySetting: string;
